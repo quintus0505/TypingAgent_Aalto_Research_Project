@@ -7,7 +7,7 @@ import csv
 import pprint
 from tqdm import tqdm
 from PIL import ImageFont, ImageDraw, Image
-from data.kbd1k.data_utils.user_config import keyboard_index, keyboard_name
+from data.kbd1k.data_utils.user_config import keyboard_index, keyboard_name, CHI21_KEYS
 from data.kbd1k.data_utils.labeling import get_imgpath, load_dataframe
 import os.path as osp
 import os
@@ -24,7 +24,7 @@ key_height = 230
 # device image
 # device_img = "./data/images/device.png"
 # device_img = "./data/images/android.png"
-device_img = "./data/images/swiftkey.png"
+# device_img = "./data/images/swiftkey.png"
 # device_img = "./data/images/grammarly.png"
 # device_img = "./data/images/designkey.png"
 
@@ -45,7 +45,6 @@ alpha = 0.7
 
 fontpath = "./src/visualise/Arial.ttf"
 font = ImageFont.truetype(fontpath, 60)
-
 
 def read_data_from_csv(filename):
     """ Reads test data stored in csv file.
@@ -456,7 +455,7 @@ def get_screenshot_key(screenshot_name):
     index = screenshot_df.loc[screenshot_df['screenshot_name'] == screenshot_name].index[0]
     for column in screenshot_df.columns:
         key_dict[column] = screenshot_df.at[index, column]
-    key_dict['-'] = key_dict.pop('shift')
+    key_dict['-'] = key_dict['shift']
     return key_dict
 
 
@@ -471,14 +470,16 @@ def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_fil
     assert kbd in keyboard_name.keys() or kbd == 'chi', "Keyboard not supported"
     if kbd in keyboard_name.keys():
         print("visualising {}".format(keyboard_name[kbd]))
+        img_path = get_imgpath(keyboard_name[kbd])
+        screen_img = cv2.imread(img_path)
+
+        screenshot_name = img_path.split('/')[-1].split('.')[0]
+        key_dict = get_screenshot_key(screenshot_name)
     else:
         print("visualising original CHI keyboard")
-    img_path = get_imgpath(keyboard_name[kbd])
-    screen_img = cv2.imread(img_path)
-
-    screenshot_name = img_path.split('/')[-1].split('.')[0]
-    key_dict = get_screenshot_key(screenshot_name)
-
+        screen_img = cv2.imread("./data/images/chikbd.png")
+        key_dict = CHI21_KEYS
+        key_dict['-'] = key_dict['shift']
 
     if has_vision:
         print("has vision")
