@@ -18,7 +18,11 @@ key_width = 131
 key_height = 230
 
 # device image
-device_img = "./data/images/device.png"
+# device_img = "./data/images/device.png"
+# device_img = "./data/images/android.png"
+device_img = "./data/images/swiftkey.png"
+# device_img = "./data/images/grammarly.png"
+# device_img = "./data/images/designkey.png"
 
 # video fps
 fps = 50
@@ -36,7 +40,7 @@ radius = 40
 alpha = 0.7
 
 fontpath = "./src/visualise/Arial.ttf"
-font = ImageFont.truetype(fontpath, 80)
+font = ImageFont.truetype(fontpath, 60)
 
 
 def read_data_from_csv(filename):
@@ -142,6 +146,9 @@ def interp_cubic_test_data(data):
         time_diff = model_time[i + 1] - model_time[i]
         n = int(time_diff / interp_ms)
 
+        print(n)
+        print(i)
+        print(n*i)
         points = [(lerp(x0, x1, ((1. / n * i)) ** 3), lerp(y0, y1, ((1. / n * i)) ** 3)) for i in range(n + 1)]
         points = points[1:]
         t = model_time[i] + interp_ms
@@ -176,6 +183,7 @@ def xy_to_key(row, col):
         Returns:
             keys[row][col] : character corresponding to row and col
     """
+    row, col = (int(row)%4), (int(col)%11)
     keys = [['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'å'],
             ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä'],
             ['-', '-', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '<', '<'],
@@ -194,8 +202,22 @@ def xy_to_pixels(row, col):
             x : x pixel in the device
             y : y pixel in the device
     """
-    x = start_x + float(col) * key_width
-    y = start_y + float(row) * key_height
+    if row < 0:
+        return 540, 130
+    char_xy = {'1': [5.25, 1271.0, 111.75, 1114.0], '2': [111.75, 1271.0, 218.25, 1114.0], '3': [218.25, 1271.0, 324.75, 1114.0], '4': [324.75, 1271.0, 431.25, 1114.0], '5': [431.25, 1271.0, 537.75, 1114.0], '6': [537.75, 1271.0, 644.25, 1114.0], '7': [644.25, 1271.0, 750.75, 1114.0], '8': [750.75, 1271.0, 857.25, 1114.0], '9': [857.25, 1271.0, 963.75, 1114.0], '0': [963.75, 1271.0, 1070.25, 1114.0], 'q': [6.25, 1425.0, 112.75, 1268.0], 'w': [112.75, 1425.0, 219.25, 1268.0], 'e': [219.25, 1425.0, 325.75, 1268.0], 'r': [325.75, 1425.0, 432.25, 1268.0], 't': [432.25, 1425.0, 538.75, 1268.0], 'y': [538.75, 1425.0, 645.25, 1268.0], 'u': [645.25, 1425.0, 751.75, 1268.0], 'i': [751.75, 1425.0, 858.25, 1268.0], 'o': [858.25, 1425.0, 964.75, 1268.0], 'p': [964.75, 1425.0, 1071.25, 1268.0], 'a': [59.75, 1582.0, 166.25, 1425.0], 's': [166.25, 1582.0, 272.75, 1425.0], 'd': [272.75, 1582.0, 379.25, 1425.0], 'f': [379.25, 1582.0, 485.75, 1425.0], 'g': [485.75, 1582.0, 592.25, 1425.0], 'h': [592.25, 1582.0, 698.75, 1425.0], 'j': [698.75, 1582.0, 805.25, 1425.0], 'k': [805.25, 1582.0, 911.75, 1425.0], 'l': [911.75, 1582.0, 1018.25, 1425.0], 'z': [164.25, 1744.5, 270.75, 1587.5], 'x': [270.75, 1744.5, 377.25, 1587.5], 'c': [377.25, 1744.5, 483.75, 1587.5], ' ': [377.25, 1901.5, 803.25, 1744.5], 'v': [483.75, 1744.5, 590.25, 1587.5], 'b': [590.25, 1744.5, 696.75, 1587.5], 'n': [696.75, 1744.5, 803.25, 1587.5], 'm': [803.25, 1744.5, 909.75, 1587.5], '-': [803.25, 1901.5, 909.75, 1744.5], '<': [909.75, 1744.5, 1080, 1587.5], '>': [909.75, 1901.5, 1080, 1744.5]}
+    swiftkey = {'q': [10, 1242, 116, 1378], 'w': [116, 1242, 222, 1378], 'e': [222, 1242, 328, 1378], 'r': [328, 1242, 434, 1378], 't': [434, 1242, 540, 1378], 'y': [540, 1242, 646, 1378], 'u': [646, 1242, 752, 1378], 'i': [752, 1242, 858, 1378], 'o': [858, 1242, 964, 1378], 'p': [964, 1242, 1070, 1378], 'a': [64, 1377, 170, 1513], 's': [170, 1377, 276, 1513], 'd': [276, 1377, 382, 1513], 'f': [382, 1377, 488, 1513], 'g': [488, 1377, 594, 1513], 'h': [594, 1377, 700, 1513], 'j': [700, 1377, 806, 1513], 'k': [806, 1377, 912, 1513], 'l': [912, 1377, 1018, 1513], 'z': [174, 1514, 280, 1650], 'x': [280, 1514, 386, 1650], 'c': [386, 1514, 492, 1650], 'v': [492, 1514, 598, 1650], 'b': [598, 1514, 704, 1650], 'n': [704, 1514, 810, 1650], 'm': [810, 1514, 916, 1650], '<': [916, 1514, 1080, 1650], ' ': [330, 1650, 804, 1785], '>': [916, 1650, 1080, 1785], '-': [804, 1650, 916, 1785]}
+    designkey = {'q': [18, 1248, 121, 1380], 'w': [121, 1248, 224, 1380], 'e': [225, 1248, 328, 1380], 'r': [328, 1248, 431, 1380], 't': [432, 1248, 535, 1380], 'y': [535, 1248, 638, 1380], 'u': [639, 1248, 742, 1380], 'i': [742, 1248, 845, 1380], 'o': [846, 1248, 949, 1380], 'p': [949, 1248, 1052, 1380], 'a': [73, 1384, 176, 1516], 's': [176, 1384, 279, 1516], 'd': [280, 1384, 383, 1516], 'f': [383, 1384, 486, 1516], 'g': [487, 1384, 590, 1516], 'h': [590, 1384, 693, 1516], 'j': [694, 1384, 797, 1516], 'k': [797, 1384, 900, 1516], 'l': [901, 1384, 1004, 1516], 'z': [175, 1512, 278, 1644], 'x': [278, 1512, 381, 1644], 'c': [382, 1512, 485, 1644], 'v': [485, 1512, 588, 1644], 'b': [589, 1512, 692, 1644], 'n': [692, 1512, 795, 1644], 'm': [796, 1512, 899, 1644], '<': [899, 1512, 1080, 1644], ' ': [258, 1644, 789, 1776], '>': [911, 1644, 1080, 1776], '-': [789, 1644, 911, 1776]}
+    grammaly = {'q': [5, 1150, 112, 1312], 'w': [112, 1150, 219, 1312], 'e': [219, 1150, 326, 1312], 'r': [326, 1150, 433, 1312], 't': [433, 1150, 540, 1312], 'y': [540, 1150, 647, 1312], 'u': [647, 1150, 754, 1312], 'i': [754, 1150, 861, 1312], 'o': [861, 1150, 968, 1312], 'p': [968, 1150, 1075, 1312], 'a': [59, 1313, 166, 1475], 's': [166, 1313, 273, 1475], 'd': [273, 1313, 380, 1475], 'f': [380, 1313, 487, 1475], 'g': [487, 1313, 594, 1475], 'h': [594, 1313, 701, 1475], 'j': [701, 1313, 808, 1475], 'k': [808, 1313, 915, 1475], 'l': [915, 1313, 1022, 1475], 'z': [166, 1472, 273, 1634], 'x': [273, 1472, 380, 1634], 'c': [380, 1472, 487, 1634], 'v': [487, 1472, 594, 1634], 'b': [594, 1472, 701, 1634], 'n': [701, 1472, 808, 1634], 'm': [808, 1472, 915, 1634], '-': [808, 1472, 915, 1634], '<': [915, 1472, 1080, 1634],' ': [373, 1634, 816, 1796],  '>': [934, 1634, 1080, 1796], '-': [816, 1634, 934, 1796]}
+    char_xy = swiftkey
+    # x = start_x + float(col) * key_width
+    # y = start_y + float(row) * key_height
+    key = xy_to_key(row, col)
+    if key not in char_xy:
+        key = '-'
+    x = char_xy[key][0] + (char_xy[key][2] - char_xy[key][0]) / 2
+    y = char_xy[key][1] + (char_xy[key][3] - char_xy[key][1]) / 2
+    x = int(x)
+    y = int(y)
     return x, y
 
 
@@ -365,10 +387,10 @@ def add_details(img, screen_img, text, has_vision, has_finger, model_time):
     img = cv2.addWeighted(img, alpha, screen_img, 1 - alpha, 0)
     img_pil = Image.fromarray(img)
     draw = ImageDraw.Draw(img_pil)
-    draw.text((525, 410), text, font=font, fill=(0, 0, 0, 0))
+    draw.text((30, 80), text, font=font, fill=(0, 0, 0, 0))
     img = np.array(img_pil)
     # cv2.putText(img, text, (520, 485), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 0), 3, cv2.LINE_AA)
-    cv2.putText(img, "Trial time = " + str(model_time) + "ms", (500, 150), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 3,
+    cv2.putText(img, "Trial time = " + str(model_time) + "ms", (30, 250), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 3,
                 cv2.LINE_AA)
     if has_vision:
         cv2.putText(img, 'Eye', (30, 440), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 3, cv2.LINE_AA)
@@ -407,11 +429,13 @@ def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_fil
     data_size = 0
 
     if has_vision:
+        print("has vision")
         eye_data = read_data_from_csv(vision_file)
         eye_data = interp_test_data(eye_data)
         if data_size == 0:  data_size = len(eye_data)
 
     if has_finger:
+        print("has finger")
         finger_data = read_data_from_csv(finger_file)
         finger_data = interp_cubic_test_data(finger_data)
         if data_size == 0:  data_size = len(finger_data)
@@ -421,7 +445,7 @@ def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_fil
         if has_finger:
             # drawing keypress if action is present
             if not finger_data[i][3] == "":
-                img = show_keypress(img, int(finger_data[i][3]), int(finger_data[i][4]))
+                # img = show_keypress(img, int(finger_data[i][3]), int(finger_data[i][4]))
                 text = update_text_area(text, finger_data[i][3], finger_data[i][4])
                 finger_point_trail.append((finger_data[i][1], finger_data[i][2]))
 
@@ -436,7 +460,7 @@ def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_fil
         if has_vision:
             # drawing keypress if action is present
             if not eye_data[i][3] == "" and not has_finger:
-                img = show_keypress(img, int(eye_data[i][3]), int(eye_data[i][4]))
+                # img = show_keypress(img, int(eye_data[i][3]), int(eye_data[i][4]))
                 text = update_text_area(text, eye_data[i][3], eye_data[i][4])
 
             if not eye_data[i][3] == "":
