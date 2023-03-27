@@ -18,9 +18,9 @@ key_width = 131
 key_height = 230
 
 # device image
-# device_img = "./data/images/device.png"
+device_img = "./data/images/device.png"
 # device_img = "./data/images/android.png"
-device_img = "./data/images/swiftkey.png"
+# device_img = "./data/images/swiftkey.png"
 # device_img = "./data/images/grammarly.png"
 # device_img = "./data/images/designkey.png"
 
