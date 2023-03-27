@@ -14,7 +14,7 @@ from src.vision.vision_agent_environment import VisionAgentEnv
 
 class VisionAgent(Agent):
 
-    def __init__(self, layout_config, agent_params, verbose=False):
+    def __init__(self, layout_config, agent_params, verbose=False, kbd=None):
         self.logger = logging.getLogger(__name__)
 
         self.env = VisionAgentEnv(layout_config, agent_params)
@@ -29,6 +29,7 @@ class VisionAgent(Agent):
         self.error_list = deque([0], maxlen=1000)
         self.reward_list = deque([0], maxlen=1000)
         self.verbose = verbose
+        self.kbd = kbd
 
     def train(self, episodes):
         """
@@ -82,7 +83,7 @@ class VisionAgent(Agent):
 
         # TODO: This is from legacy code. Need to update.
         visualise_agent(True, False, path.join("data", "output", self.log_filename), None,
-                        path.join("data", "output", "VisionAgent.mp4"))
+                        path.join("data", "output", "VisionAgent.mp4"), self.kbd)
 
     def save_log_data(self, data, mode='w'):
         """

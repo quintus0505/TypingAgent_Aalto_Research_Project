@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import numpy as np
 import queue
@@ -7,6 +7,10 @@ import csv
 import pprint
 from tqdm import tqdm
 from PIL import ImageFont, ImageDraw, Image
+from data.kbd1k.data_utils.user_config import keyboard_index, keyboard_name
+from data.kbd1k.data_utils.labeling import get_imgpath, load_dataframe
+import os.path as osp
+import os
 
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -18,9 +22,9 @@ key_width = 131
 key_height = 230
 
 # device image
-device_img = "./data/images/device.png"
+# device_img = "./data/images/device.png"
 # device_img = "./data/images/android.png"
-# device_img = "./data/images/swiftkey.png"
+device_img = "./data/images/swiftkey.png"
 # device_img = "./data/images/grammarly.png"
 # device_img = "./data/images/designkey.png"
 
@@ -58,6 +62,33 @@ def read_data_from_csv(filename):
         data = list(list(line) for line in reader)
         data = data[1:]
         return data
+
+
+# def get_imgpath(keyboard_name, dataset_dir=DEFAULT_KEYBOARD_DATASET_DIR, number_row=False):
+#     """
+#     Get image path based on given keyboard name and dataset dir (/keyboard_dataset)
+#     :param keyboard_name:
+#     :param dataset_dir:
+#     :param number_row:
+#     :return:
+#     """
+#     # TODO: modify when there is a csv for keyboard name and index
+#     assert osp.exists(dataset_dir), "No dataset under current dataset dir"
+#     file_names = os.listdir(dataset_dir)
+#
+#     # get img considering w/o light theme
+#     if not number_row:
+#         img_name_suffixes = ['_0_1_1_1_1.png', '_0_0_1_1_1.png', '_0_1_0_1_1.png', '_0_0_0_1_1.png', '_0_1_1_0_1.png',
+#                              '_0_0_1_0_1.png', '_0_1_0_0_1.png', '_0_0_0_0_1.png']
+#     else:
+#         img_name_suffixes = ['_0_1_1_1_3.png', '_0_0_1_1_3.png', '_0_1_0_1_3.png', '_0_0_0_1_3.png', '_0_1_1_0_3.png',
+#                              '_0_0_1_0_3.png', '_0_1_0_0_3.png', '_0_0_0_0_3.png']
+#     for img_name_suffix in img_name_suffixes:
+#         img_name = keyboard_index[keyboard_name] + img_name_suffix
+#         if img_name in file_names:
+#             return dataset_dir + '/' + img_name
+#     raise Exception(
+#         "{} {} does not have a version with border and uppercase".format(keyboard_name, keyboard_index[keyboard_name]))
 
 
 def interp_test_data(data):
@@ -191,7 +222,7 @@ def xy_to_key(row, col):
     return keys[row][col]
 
 
-def xy_to_pixels(row, col):
+def xy_to_pixels(row, col, key_dict):
     """ given row and col returns the pixel x and y for the device.
 
         Args:
@@ -208,7 +239,7 @@ def xy_to_pixels(row, col):
     swiftkey = {'q': [10, 1242, 116, 1378], 'w': [116, 1242, 222, 1378], 'e': [222, 1242, 328, 1378], 'r': [328, 1242, 434, 1378], 't': [434, 1242, 540, 1378], 'y': [540, 1242, 646, 1378], 'u': [646, 1242, 752, 1378], 'i': [752, 1242, 858, 1378], 'o': [858, 1242, 964, 1378], 'p': [964, 1242, 1070, 1378], 'a': [64, 1377, 170, 1513], 's': [170, 1377, 276, 1513], 'd': [276, 1377, 382, 1513], 'f': [382, 1377, 488, 1513], 'g': [488, 1377, 594, 1513], 'h': [594, 1377, 700, 1513], 'j': [700, 1377, 806, 1513], 'k': [806, 1377, 912, 1513], 'l': [912, 1377, 1018, 1513], 'z': [174, 1514, 280, 1650], 'x': [280, 1514, 386, 1650], 'c': [386, 1514, 492, 1650], 'v': [492, 1514, 598, 1650], 'b': [598, 1514, 704, 1650], 'n': [704, 1514, 810, 1650], 'm': [810, 1514, 916, 1650], '<': [916, 1514, 1080, 1650], ' ': [330, 1650, 804, 1785], '>': [916, 1650, 1080, 1785], '-': [804, 1650, 916, 1785]}
     designkey = {'q': [18, 1248, 121, 1380], 'w': [121, 1248, 224, 1380], 'e': [225, 1248, 328, 1380], 'r': [328, 1248, 431, 1380], 't': [432, 1248, 535, 1380], 'y': [535, 1248, 638, 1380], 'u': [639, 1248, 742, 1380], 'i': [742, 1248, 845, 1380], 'o': [846, 1248, 949, 1380], 'p': [949, 1248, 1052, 1380], 'a': [73, 1384, 176, 1516], 's': [176, 1384, 279, 1516], 'd': [280, 1384, 383, 1516], 'f': [383, 1384, 486, 1516], 'g': [487, 1384, 590, 1516], 'h': [590, 1384, 693, 1516], 'j': [694, 1384, 797, 1516], 'k': [797, 1384, 900, 1516], 'l': [901, 1384, 1004, 1516], 'z': [175, 1512, 278, 1644], 'x': [278, 1512, 381, 1644], 'c': [382, 1512, 485, 1644], 'v': [485, 1512, 588, 1644], 'b': [589, 1512, 692, 1644], 'n': [692, 1512, 795, 1644], 'm': [796, 1512, 899, 1644], '<': [899, 1512, 1080, 1644], ' ': [258, 1644, 789, 1776], '>': [911, 1644, 1080, 1776], '-': [789, 1644, 911, 1776]}
     grammaly = {'q': [5, 1150, 112, 1312], 'w': [112, 1150, 219, 1312], 'e': [219, 1150, 326, 1312], 'r': [326, 1150, 433, 1312], 't': [433, 1150, 540, 1312], 'y': [540, 1150, 647, 1312], 'u': [647, 1150, 754, 1312], 'i': [754, 1150, 861, 1312], 'o': [861, 1150, 968, 1312], 'p': [968, 1150, 1075, 1312], 'a': [59, 1313, 166, 1475], 's': [166, 1313, 273, 1475], 'd': [273, 1313, 380, 1475], 'f': [380, 1313, 487, 1475], 'g': [487, 1313, 594, 1475], 'h': [594, 1313, 701, 1475], 'j': [701, 1313, 808, 1475], 'k': [808, 1313, 915, 1475], 'l': [915, 1313, 1022, 1475], 'z': [166, 1472, 273, 1634], 'x': [273, 1472, 380, 1634], 'c': [380, 1472, 487, 1634], 'v': [487, 1472, 594, 1634], 'b': [594, 1472, 701, 1634], 'n': [701, 1472, 808, 1634], 'm': [808, 1472, 915, 1634], '-': [808, 1472, 915, 1634], '<': [915, 1472, 1080, 1634],' ': [373, 1634, 816, 1796],  '>': [934, 1634, 1080, 1796], '-': [816, 1634, 934, 1796]}
-    char_xy = swiftkey
+    char_xy = key_dict
     # x = start_x + float(col) * key_width
     # y = start_y + float(row) * key_height
     key = xy_to_key(row, col)
@@ -221,7 +252,7 @@ def xy_to_pixels(row, col):
     return x, y
 
 
-def draw_agent(img, loc_x, loc_y, rgb):
+def draw_agent(img, loc_x, loc_y, rgb, key_dict):
     """ draw agent location on the device with given color.
 
         Args:
@@ -235,12 +266,12 @@ def draw_agent(img, loc_x, loc_y, rgb):
             x : x pixel of agent in the device
             y : y pixel of agent in the device
     """
-    x, y = xy_to_pixels(loc_x, loc_y)
+    x, y = xy_to_pixels(loc_x, loc_y, key_dict)
     agent_drawn_img = cv2.circle(img, (int(x), int(y)), radius, rgb, -1)
     return agent_drawn_img, int(x), int(y)
 
 
-def draw_agent_points(img, trail_data, rgb, vision):
+def draw_agent_points(img, trail_data, rgb, vision, key_dict):
     """ draw agent location on the device with given color.
 
         Args:
@@ -255,7 +286,7 @@ def draw_agent_points(img, trail_data, rgb, vision):
             y : y pixel of agent in the device
     """
     for j in range(len(trail_data)):
-        x, y = xy_to_pixels(trail_data[j][0], trail_data[j][1])
+        x, y = xy_to_pixels(trail_data[j][0], trail_data[j][1], key_dict)
         if vision:
             img = cv2.circle(img, (int(x), int(y)), radius - 10, rgb, -1)
         else:
@@ -284,7 +315,7 @@ def draw_agent_trail(img, trail_data, rgb, vision):
     return img
 
 
-def show_keypress(img, action_x, action_y):
+def show_keypress(img, action_x, action_y, key_dict):
     """ highlights the pressed key.
 
         Args:
@@ -297,7 +328,7 @@ def show_keypress(img, action_x, action_y):
             x : x pixel of agent in the device
             y : y pixel of agent in the device
     """
-    x, y = xy_to_pixels(action_x, action_y)
+    x, y = xy_to_pixels(action_x, action_y, key_dict)
     x1 = 0;
     x2 = 0
 
@@ -418,8 +449,18 @@ def save_video(screen_img, screen_arr, output_file):
     out.release()
 
 
-def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_file):
-    screen_img = cv2.imread(device_img)
+def get_screenshot_key(screenshot_name):
+    df = load_dataframe()
+    screenshot_df = df[df['screenshot_name'] == screenshot_name]
+    key_dict = dict()
+    index = screenshot_df.loc[screenshot_df['screenshot_name'] == screenshot_name].index[0]
+    for column in screenshot_df.columns:
+        key_dict[column] = screenshot_df.at[index, column]
+    key_dict['-'] = key_dict.pop('shift')
+    return key_dict
+
+
+def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_file, kbd=None):
     screen_arr = []
     eye_trail = []
     finger_trail = []
@@ -427,6 +468,17 @@ def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_fil
     finger_point_trail = []
     text = ""
     data_size = 0
+    assert kbd in keyboard_name.keys() or kbd == 'chi', "Keyboard not supported"
+    if kbd in keyboard_name.keys():
+        print("visualising {}".format(keyboard_name[kbd]))
+    else:
+        print("visualising original CHI keyboard")
+    img_path = get_imgpath(keyboard_name[kbd])
+    screen_img = cv2.imread(img_path)
+
+    screenshot_name = img_path.split('/')[-1].split('.')[0]
+    key_dict = get_screenshot_key(screenshot_name)
+
 
     if has_vision:
         print("has vision")
@@ -449,8 +501,8 @@ def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_fil
                 text = update_text_area(text, finger_data[i][3], finger_data[i][4])
                 finger_point_trail.append((finger_data[i][1], finger_data[i][2]))
 
-            img = draw_agent_points(img, finger_point_trail, finger_rgb, False)
-            img, fingerloc_x, fingerloc_y = draw_agent(img, finger_data[i][1], finger_data[i][2], finger_rgb)
+            img = draw_agent_points(img, finger_point_trail, finger_rgb, False, key_dict)
+            img, fingerloc_x, fingerloc_y = draw_agent(img, finger_data[i][1], finger_data[i][2], finger_rgb, key_dict)
 
             finger_trail.append((fingerloc_x, fingerloc_y))
             # if len(finger_trail) > 10: finger_trail.pop(0)  # restriciting trail size to 10
@@ -466,8 +518,8 @@ def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_fil
             if not eye_data[i][3] == "":
                 eye_point_trail.append((eye_data[i][1], eye_data[i][2]))
 
-            img = draw_agent_points(img, eye_point_trail, eye_rgb, True)
-            img, eyeloc_x, eyeloc_y = draw_agent(img, eye_data[i][1], eye_data[i][2], eye_rgb)
+            img = draw_agent_points(img, eye_point_trail, eye_rgb, True, key_dict)
+            img, eyeloc_x, eyeloc_y = draw_agent(img, eye_data[i][1], eye_data[i][2], eye_rgb, key_dict)
             eye_trail.append((eyeloc_x, eyeloc_y))
             # if len(eye_trail) > 10: eye_trail.pop(0)  # restriciting trail size to 10
             img = draw_agent_trail(img, eye_trail, eye_rgb, True)
