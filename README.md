@@ -65,10 +65,16 @@ To train the agents, use the command below. Please check and edit the configurat
 python main.py --train --all --config config.yml
 ```
 
-To evaluate the trained agent, use the command below.
+To evaluate the trained agent on chi21 keyboard, use the command below.
 
 ```
-python main.py --all --config config.yml --type "hello world>"
+python main.py --all --config config.yml --type "hello world>" --kbd chi
+```
+
+To evaluate the trained agent on kbd1k, use the command below, the number indicate the index of the keyboard, like 00 for Gboard.
+
+```
+python main.py --all --config config.yml --type "hello world>" --kbd 00
 ```
 
 To see all available argument, use the command below.
