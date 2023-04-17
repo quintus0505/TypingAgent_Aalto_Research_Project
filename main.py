@@ -33,7 +33,7 @@ parser.add_argument("--batch", action="store_true", default=False, help="evaluat
 parser.add_argument("--users", type=int, default=1, help="number of users to simulate")
 parser.add_argument("--twofinger", action="store_true", default=False, help="enable typing with two finger.")
 parser.add_argument("--verbose", action="store_true", default=False, help="print tqdm step in new line.")
-parser.add_argument('--kbd', default='00', help='select the keyboard index in kbd1k dataset.')
+parser.add_argument('--kbd', default='chi', help='select the keyboard index in kbd1k dataset.')
 # get user command line arguments.
 args = parser.parse_args()
 
