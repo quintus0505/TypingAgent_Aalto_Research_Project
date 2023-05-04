@@ -26,7 +26,7 @@ from src.supervisor.supervisor_agent_two_finger_env import SupervisorEnvironment
 
 class SupervisorAgent(Agent):
 
-    def __init__(self, layout_config, agent_params, train, finger_two, verbose=False, kbd=None):
+    def __init__(self, layout_config, agent_params, train, finger_two, verbose=False, kbd=None, size=None):
         self.logger = logging.getLogger(__name__)
 
         self.layout_config = layout_config
@@ -35,6 +35,7 @@ class SupervisorAgent(Agent):
         self.finger_two = finger_two
         self.verbose = verbose
         self.kbd = kbd
+        self.size = size
 
         if finger_two:
             self.env = SupervisorEnvironment_(self.layout_config, self.agent_params, self.train_model)
@@ -215,7 +216,7 @@ class SupervisorAgent(Agent):
             # TODO: This is from legacy code. Need to update.
             visualise_agent(True, True, path.join("data", "output", "SupervisorAgent_vision_test.csv"),
                             path.join("data", "output", "SupervisorAgent_finger_test.csv"),
-                            path.join("data", "output", "SupervisorAgent.mp4"), self.kbd)
+                            path.join("data", "output", "SupervisorAgent.mp4"), self.kbd, self.size)
 
         self.save_senetence_agg_data(path.join("data", "output", "SupervisorAgent_sentence_test.csv"))
         self.save_user_agg_data(path.join("data", "output", "SupervisorAgent_sentence_test.csv"))

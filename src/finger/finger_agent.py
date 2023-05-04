@@ -19,7 +19,7 @@ from src.finger.finger_agent_environment import FingerAgentEnv
 
 class FingerAgent(Agent):
 
-    def __init__(self, layout_config, agent_params, finger, train, verbose=True, kbd=None):
+    def __init__(self, layout_config, agent_params, finger, train, verbose=True, kbd=None, size=None):
         self.logger = logging.getLogger(__name__)
 
         self.env = FingerAgentEnv(layout_config, agent_params, finger, train)
@@ -41,6 +41,7 @@ class FingerAgent(Agent):
         self.log_filename = agent_params['log_file']
         self.verbose = verbose
         self.kbd = kbd
+        self.size = size
 
         self.q_func = QFunction(embed_size=self.env.observation_space.shape[0],
                                 dropout_ratio=dropout_ratio,
@@ -138,7 +139,7 @@ class FingerAgent(Agent):
 
         # TODO: This is from legacy code. Need to update.
         visualise_agent(True, False, path.join("data", "output", self.log_filename), None,
-                        path.join("data", "output", "FingerAgent.mp4"), self.kbd)
+                        path.join("data", "output", "FingerAgent.mp4"), self.kbd, size=self.size)
 
     def type_char(self, char, sat_d, is_eye_present=False):
         """

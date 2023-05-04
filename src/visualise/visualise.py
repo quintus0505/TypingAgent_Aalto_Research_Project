@@ -7,8 +7,7 @@ import csv
 import pprint
 from tqdm import tqdm
 from PIL import ImageFont, ImageDraw, Image
-from data.kbd1k.data_utils.user_config import keyboard_index, keyboard_name, CHI21_KEYS
-from data.kbd1k.data_utils.labeling import get_imgpath, load_dataframe
+from data.kbd.user_config import keyboard_index, keyboard_name, CHI21_KEYS, get_imgpath, load_dataframe
 import os.path as osp
 import os
 
@@ -61,33 +60,6 @@ def read_data_from_csv(filename):
         data = list(list(line) for line in reader)
         data = data[1:]
         return data
-
-
-# def get_imgpath(keyboard_name, dataset_dir=DEFAULT_KEYBOARD_DATASET_DIR, number_row=False):
-#     """
-#     Get image path based on given keyboard name and dataset dir (/keyboard_dataset)
-#     :param keyboard_name:
-#     :param dataset_dir:
-#     :param number_row:
-#     :return:
-#     """
-#     # TODO: modify when there is a csv for keyboard name and index
-#     assert osp.exists(dataset_dir), "No dataset under current dataset dir"
-#     file_names = os.listdir(dataset_dir)
-#
-#     # get img considering w/o light theme
-#     if not number_row:
-#         img_name_suffixes = ['_0_1_1_1_1.png', '_0_0_1_1_1.png', '_0_1_0_1_1.png', '_0_0_0_1_1.png', '_0_1_1_0_1.png',
-#                              '_0_0_1_0_1.png', '_0_1_0_0_1.png', '_0_0_0_0_1.png']
-#     else:
-#         img_name_suffixes = ['_0_1_1_1_3.png', '_0_0_1_1_3.png', '_0_1_0_1_3.png', '_0_0_0_1_3.png', '_0_1_1_0_3.png',
-#                              '_0_0_1_0_3.png', '_0_1_0_0_3.png', '_0_0_0_0_3.png']
-#     for img_name_suffix in img_name_suffixes:
-#         img_name = keyboard_index[keyboard_name] + img_name_suffix
-#         if img_name in file_names:
-#             return dataset_dir + '/' + img_name
-#     raise Exception(
-#         "{} {} does not have a version with border and uppercase".format(keyboard_name, keyboard_index[keyboard_name]))
 
 
 def interp_test_data(data):
@@ -459,7 +431,7 @@ def get_screenshot_key(screenshot_name):
     return key_dict
 
 
-def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_file, kbd=None):
+def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_file, kbd=None, size=None):
     screen_arr = []
     eye_trail = []
     finger_trail = []
@@ -467,6 +439,26 @@ def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_fil
     finger_point_trail = []
     text = ""
     data_size = 0
+    kbd_id = '00'
+    size_id = '1'
+    if kbd == "Gboard":
+        kbd_id = '00'
+    elif kbd == "Swiftkey":
+        kbd_id = '01'
+    elif kbd == "Go":
+        kbd_id = '04'
+    elif kbd != 'chi':
+        raise Exception("Keyboard not supported")
+
+    if size == "small":
+        size_id = '1'
+    elif size == "medium":
+        size_id = '2'
+    elif size == "large":
+        size_id = '3'
+
+    kbd = kbd_id + size_id
+
     assert kbd in keyboard_name.keys() or kbd == 'chi', "Keyboard not supported"
     if kbd in keyboard_name.keys():
         print("visualising {}".format(keyboard_name[kbd]))

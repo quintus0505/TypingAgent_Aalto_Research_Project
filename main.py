@@ -33,7 +33,8 @@ parser.add_argument("--batch", action="store_true", default=False, help="evaluat
 parser.add_argument("--users", type=int, default=1, help="number of users to simulate")
 parser.add_argument("--twofinger", action="store_true", default=False, help="enable typing with two finger.")
 parser.add_argument("--verbose", action="store_true", default=False, help="print tqdm step in new line.")
-parser.add_argument('--kbd', default='chi', help='select the keyboard index in kbd1k dataset.')
+parser.add_argument('--kbd', default='Gboard', help='select the keyboard index in kbd1k dataset.')
+parser.add_argument('--key_height', default='medium', help='the key height in the keyboard.')
 # get user command line arguments.
 args = parser.parse_args()
 
@@ -105,19 +106,22 @@ else:
 
     if args.vision or args.all:
         logger.info("Initiating Vision Agent Evaluation.")
-        vision_agent = VisionAgent(config_file['device_config'], test_config['vision'], kbd=args.kbd)
+        vision_agent = VisionAgent(config_file['device_config'], test_config['vision'], kbd=args.kbd,
+                                   size=args.key_height)
         vision_agent.evaluate(args.type)
 
     if args.finger or args.all:
         logger.info("Initiating Finger Agent Evaluation.")
-        finger_agent = FingerAgent(config_file['device_config'], test_config['finger'], 0, False, kbd=args.kbd)
+        finger_agent = FingerAgent(config_file['device_config'], test_config['finger'], 0, False, kbd=args.kbd,
+                                   size=args.key_height)
         finger_agent.evaluate(args.type, sat_desired=test_config['finger']['typing_accuracy'])
 
     if args.supervisor or args.all:
         logger.info("Initiating Supervisor Agent Evaluation.")
         if args.twofinger:
-            supervisor_agent = SupervisorAgent(config_file['device_config'], test_config, False, True, args.verbose, kbd=args.kbd)
+            supervisor_agent = SupervisorAgent(config_file['device_config'], test_config, False, True, args.verbose,
+                                               kbd=args.kbd, size=args.key_height)
         else:
-            supervisor_agent = SupervisorAgent(config_file['device_config'], test_config, False, False, args.verbose, kbd=args.kbd)
+            supervisor_agent = SupervisorAgent(config_file['device_config'], test_config, False, False, args.verbose,
+                                               kbd=args.kbd, size=args.key_height)
         supervisor_agent.evaluate(args.type, args.batch, args.users)
-
