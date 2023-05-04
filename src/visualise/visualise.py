@@ -457,8 +457,8 @@ def visualise_agent(has_vision, has_finger, vision_file, finger_file, output_fil
         size_id = '2'
     elif size == "large":
         size_id = '3'
-
-    kbd = kbd_id + size_id
+    if kbd != 'chi':
+        kbd = kbd_id + size_id
 
     assert kbd in keyboard_name.keys() or kbd == 'chi', "Keyboard not supported"
     if kbd in keyboard_name.keys():
