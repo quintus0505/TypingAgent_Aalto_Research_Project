@@ -8,6 +8,7 @@ import pprint
 from tqdm import tqdm
 from PIL import ImageFont, ImageDraw, Image
 from data.kbd.user_config import keyboard_index, keyboard_name, CHI21_KEYS, get_imgpath, load_dataframe
+
 import os.path as osp
 import os
 
