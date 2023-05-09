@@ -50,6 +50,9 @@ setup_logging(default_path=path.join("configs", "logging.yml"))
 logger = logging.getLogger(__name__)
 logger.info("logger is set.")
 
+# get rid of punctuations and change to lower case.
+args.type = args.type.replace(".", "").replace(",", "").replace("?", "").replace("!", "").replace("'", "").lower()
+
 # load app config.
 if path.exists(path.join("configs", args.config)):
     with open(path.join("configs", args.config), 'r') as file:
