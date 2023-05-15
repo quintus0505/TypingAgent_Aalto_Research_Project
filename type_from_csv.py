@@ -40,10 +40,10 @@ keyboards = ['Gboard', 'SwiftKey', 'Go']
 # List of keyheights to evaluate param --key_height
 keyheights = ['small', 'medium', 'large']
 
-#TESTING# Remove when release
-keyboards = ['Gboard']
-keyheights = ['small']
-number_sentences = 2
+#TESTING# Comment when release
+#keyboards = ['Gboard']
+#keyheights = ['small']
+#number_sentences = 2
 
 # Command to run evaluation
 TASK_EVALUATION = 'python main.py --all --config config.yml --type "{0}" --kbd {1} --key_height {2}'
@@ -116,8 +116,9 @@ with open(filepath, 'r') as f:
     print("Read input file: {0}".format(filepath))
     for row in reader:
         id = row[0]
+        text = row[1]
         # Clean up text: covert to lower case and remove punctuation
-        text = re.sub(r'[^\w\s]', '', row[1].lower())
+        text = re.sub(r'[^\w\s]', '', text.lower())
         # Stop after fetching a certain amount of sentences param number_sentences
         if int(id) > number_sentences: break
         sentences.append({
