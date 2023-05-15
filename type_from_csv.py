@@ -69,40 +69,36 @@ def runevaluate(ns,kbs,khs,o):
         for kb in kbs:
             for kh in khs:
                 cmd = TASK_EVALUATION.format(s['text'],kb,kh)
-                cmd_list.append(cmd)
-                print(cmd)
 
-    pass
-    for index, cmd in enumerate(cmd_list):
-        print("Started running evaluation on {0}-{1} : sentence {2}".format(kb, kh, s['text']))
-        print("python cmd: ", index, cmd)
-        # Run evaluation process under a subprocess to wait for result
-        subprocess.Popen(cmd, shell=True).wait()
-        print("{0}-{1}-s{2} complete!".format(kb,kh,s['id']))
+                print("Started running evaluation on {0}-{1} : sentence {2}".format(kb, kh, s['text']))
+                # Run evaluation process under a subprocess to wait for result
+                subprocess.Popen(cmd, shell=True).wait()
+                print("{0}-{1}-s{2} evaluation complete!".format(kb,kh,s['id']))
 
-        # EXPORT result to output folder
-        print("Copy res from `data/output/SupervisorAgent_sentence_test.csv` to {1}".format(o_path, o_filepath))
-        res = []
-        # Open `SupervisorAgent_sentence_test.csv`
-        with open(o_supervisorAgentTest, 'r') as f:
-            # Skip the first row - Fields
-            next(f)
-            # Start reading from the second row - data
-            reader = csv.reader(f)
-            print("Read SupervisorAgent_sentence_test.csv")
-            # Marked which row I am to filter only first data row
-            currentrow = 0
-            for row in reader:
-                # Stop after fetching the first row data
-                if currentrow > 0: break
-                res = row
-                # Increasement
-                currentrow += 1
-        f.close()
-        # Write row to results.csv
-        print("Add a new row to {0}",o_file)
-        o.writerow(res)
-        print("FINISHED", index+1)
+                # EXPORT result to output folder
+                print("Copy res from `data/output/SupervisorAgent_sentence_test.csv` to {1}".format(o_path, o_filepath))
+                res = []
+                # Open `SupervisorAgent_sentence_test.csv`
+                with open(o_supervisorAgentTest, 'r') as f:
+                    # Skip the first row - Fields
+                    next(f)
+                    # Start reading from the second row - data
+                    reader = csv.reader(f)
+                    print("Read SupervisorAgent_sentence_test.csv")
+                    # Marked which row I am to filter only first data row
+                    currentrow = 0
+                    for row in reader:
+                        # Stop after fetching the first row data
+                        if currentrow > 0: break
+                        row.extend([kb,kh])
+                        res = row
+                        # Increasement
+                        currentrow += 1
+                f.close()
+                # Write row to results.csv
+                print("Add a new row to {0}",o_file)
+                o.writerow(res)
+                print("{0}-{1}-s{2} FINISHED!".format(kb,kh,s['id']))
 
 # Run final test to verify that the number of rows == the number of sentences (ns*nkb*nkh)
 # Parameters:
