@@ -7,13 +7,21 @@ import pandas as pd
 
 # Input file must be stored in the same folder
 filepath = 'sentences.csv'
-# Number of input sentences to type
-number_sentences = 15
+
+# ARGUMENTS
+parser = argparse.ArgumentParser()
+parser.add_argument('--ns', default='15', help='number of sentences to types from the beginning of the sentences.csv')
+# get user command line arguments.
+args = parser.parse_args()
+
+# If --ns helper is set, update the number_sentences
+if args.ns:
+    number_sentences = int(args.ns)
+
 # Output as a directory in the same folder
 o_path = 'typefromcsvres'
 o_filepath = 'typefromcsvres/results.csv'
 o_fields = [
-    'sentence.text',
     'sentence.id',
     'agent.id',
     'target.sentence',
@@ -47,16 +55,6 @@ number_sentences = 2
 
 # Command to run evaluation
 TASK_EVALUATION = 'python main.py --all --config config.yml --type "{0}" --kbd {1} --key_height {2}'
-
-# ARGUMENTS
-parser = argparse.ArgumentParser()
-parser.add_argument('--ns', default='15', help='number of sentences to types from the beginning of the sentences.csv')
-# get user command line arguments.
-args = parser.parse_args()
-
-# If --ns helper is set, update the number_sentences
-if args.ns:
-    number_sentences = int(args.ns)
 
 # Run an evaluation test on Supervisor Agent with the following input parameters
 # Parameters:
