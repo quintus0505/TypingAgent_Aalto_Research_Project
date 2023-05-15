@@ -38,7 +38,9 @@ o_fields = [
     'correct.error',
     'uncorrected.error',
     'fix.duration',
-    'chunk.length'
+    'chunk.length',
+    'keyboard.type',
+    'keyheight.type'
 ]
 # Supervisor files
 o_supervisorAgentTest = 'data/output/SupervisorAgent_sentence_test.csv'
