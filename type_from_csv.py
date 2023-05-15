@@ -69,9 +69,10 @@ def runevaluate(ns,kbs,khs,o):
         for kb in kbs:
             for kh in khs:
                 print("Started running evaluation on {0}-{1} : sentence {2}".format(kb, kh, s['text']))
-                print("python cmd: ",TASK_EVALUATION.format(s['text'],kb,kh))
+                cmd = TASK_EVALUATION.format(s['text'],kb,kh)
+                print("python cmd: ",cmd)
                 # Run evaluation process under a subprocess to wait for result
-                subprocess.Popen(TASK_EVALUATION.format(s,kb,kh),shell=True).wait()
+                subprocess.Popen(cmd, shell=True).wait()
                 print("{0}-{1}-s{2} complete!".format(kb,kh,s['id']))
 
                 # EXPORT result to output folder
