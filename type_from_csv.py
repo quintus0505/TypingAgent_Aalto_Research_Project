@@ -51,9 +51,9 @@ keyboards = ['Gboard', 'SwiftKey', 'Go']
 keyheights = ['small', 'medium', 'large']
 
 #TESTING# Comment when release
-keyboards = ['Gboard']
-keyheights = ['small']
-number_sentences = 2
+#keyboards = ['Go']
+# keyheights = ['small']
+# number_sentences = 2
 
 # Command to run evaluation
 TASK_EVALUATION = 'python main.py --all --config config.yml --type "{0}" --kbd {1} --key_height {2}'
