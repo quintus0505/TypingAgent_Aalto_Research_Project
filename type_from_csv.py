@@ -41,9 +41,9 @@ keyboards = ['Gboard', 'SwiftKey', 'Go']
 keyheights = ['small', 'medium', 'large']
 
 #TESTING# Comment when release
-#keyboards = ['Gboard']
-#keyheights = ['small']
-#number_sentences = 2
+keyboards = ['Gboard']
+keyheights = ['small']
+number_sentences = 2
 
 # Command to run evaluation
 TASK_EVALUATION = 'python main.py --all --config config.yml --type "{0}" --kbd {1} --key_height {2}'
@@ -53,6 +53,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--ns', default='15', help='number of sentences to types from the beginning of the sentences.csv')
 # get user command line arguments.
 args = parser.parse_args()
+
+# If --ns helper is set, update the number_sentences
+if args.ns:
+    number_sentences = int(args.ns)
 
 # Run an evaluation test on Supervisor Agent with the following input parameters
 # Parameters:
@@ -120,7 +124,7 @@ with open(filepath, 'r') as f:
         # Clean up text: covert to lower case and remove punctuation
         text = re.sub(r'[^\w\s]', '', text.lower())
         # Stop after fetching a certain amount of sentences param number_sentences
-        if int(id) > number_sentences: break
+        if int(id) > int(number_sentences): break
         sentences.append({
             'id': id,
             'text': text,
