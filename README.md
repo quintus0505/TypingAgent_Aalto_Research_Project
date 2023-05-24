@@ -1,30 +1,10 @@
 # Touchscreen Typing as Optimal Adaptation
 
-This project presents a computational model of how people type on touchscreen keyboards.
+This repository contains the project work in "ELEC-E7861 - Research Project in Human-Computer Interaction" in Aalto University in 2023. The original work can be seen in [TypingAgent](https://github.com/aditya02acharya/TypingAgent.git)
 
-For more information: 
-
-  * [Project website](https://userinterfaces.aalto.fi/touchscreen-typing/)
-  * [Research paper](https://userinterfaces.aalto.fi/touchscreen-typing/resources/touchscreen_typing_as_optimal_adaptation.pdf)
 
 ## Demo of the model
 ![demo](./data/output/demo2.gif)
-
-## Citation
-
-Please cite our paper as:
-
-```
-@article{jokinen2021touchscreen,
-  title={Touchscreen typing as optimal supervisory control},
-  author={Jokinen, Jussi and Acharya, Aditya and Uzair, Mohammad and Jiang, Xinhui and Oulasvirta, Antti},
-  booktitle={Proceedings of the 2021 CHI Conference on Human Factors in Computing Systems},
-  pages={1--14},
-  year={2021},
-  publisher = {ACM},
-  doi = {https://doi.org/10.1145/3411764.3445483}
-}
-```
 
 ## Getting Started
 
@@ -152,7 +132,11 @@ npm start
 
 Please wait for around 20s, and the landing page http://localhost:3000/#/ will be automatically opened on your browser.
 
-## Authors
+## Authors and contributors of this research project
+- **Yujun Zhu**
+- **Helena Kirsta**
+
+## Authors of the original paper
 
 - **Jussi P.P. Jokinen**
 - **Aditya Acharya**
@@ -160,12 +144,10 @@ Please wait for around 20s, and the landing page http://localhost:3000/#/ will b
 - **Xinhui Jiang**
 - **Antti Oulasvirta**
 
-## Contributors
+## Contributors of the original repo
 
 - **Jussi P.P. Jokinen**
 - **Aditya Acharya**
 - **Mohammad Uzair**
 - **Anqi Yang**
 
-## Acknowledgments
-This research has been supported by the Academy of Finland projects BAD and Human Automata, and Finnish Center for AI (FCAI).
