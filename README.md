@@ -22,7 +22,7 @@ The project also uses GPU for training neural network based AI agents. For GPU s
 ### Installing
 
 ```
-git clone https://github.com/aditya02acharya/TypingAgent.git
+git clone https://github.com/quintus0505/TypingAgent_Aalto_Research_Project.git
 ```
 
 Project provides an anaconda environment setup file to install project prerequisites.
