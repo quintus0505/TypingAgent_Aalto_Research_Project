@@ -7,13 +7,21 @@ import pandas as pd
 
 # Input file must be stored in the same folder
 filepath = 'sentences.csv'
-# Number of input sentences to type
-number_sentences = 15
+
+# ARGUMENTS
+parser = argparse.ArgumentParser()
+parser.add_argument('--ns', default='15', help='number of sentences to types from the beginning of the sentences.csv')
+# get user command line arguments.
+args = parser.parse_args()
+
+# If --ns helper is set, update the number_sentences
+if args.ns:
+    number_sentences = int(args.ns)
+
 # Output as a directory in the same folder
 o_path = 'typefromcsvres'
 o_filepath = 'typefromcsvres/results.csv'
 o_fields = [
-    'sentence.text',
     'sentence.id',
     'agent.id',
     'target.sentence',
@@ -30,7 +38,9 @@ o_fields = [
     'correct.error',
     'uncorrected.error',
     'fix.duration',
-    'chunk.length'
+    'chunk.length',
+    'keyboard.type',
+    'keyheight.type'
 ]
 # Supervisor files
 o_supervisorAgentTest = 'data/output/SupervisorAgent_sentence_test.csv'
@@ -41,18 +51,12 @@ keyboards = ['Gboard', 'SwiftKey', 'Go']
 keyheights = ['small', 'medium', 'large']
 
 #TESTING# Comment when release
-#keyboards = ['Gboard']
-#keyheights = ['small']
-#number_sentences = 2
+#keyboards = ['Go']
+# keyheights = ['small']
+# number_sentences = 2
 
 # Command to run evaluation
 TASK_EVALUATION = 'python main.py --all --config config.yml --type "{0}" --kbd {1} --key_height {2}'
-
-# ARGUMENTS
-parser = argparse.ArgumentParser()
-parser.add_argument('--ns', default='15', help='number of sentences to types from the beginning of the sentences.csv')
-# get user command line arguments.
-args = parser.parse_args()
 
 # Run an evaluation test on Supervisor Agent with the following input parameters
 # Parameters:
@@ -61,14 +65,17 @@ args = parser.parse_args()
 # @khs: array of keyheights
 # @o: path to output file
 def runevaluate(ns,kbs,khs,o):
+    cmd_list = []
+
     for s in ns:
         for kb in kbs:
             for kh in khs:
+                cmd = TASK_EVALUATION.format(s['text'],kb,kh)
+
                 print("Started running evaluation on {0}-{1} : sentence {2}".format(kb, kh, s['text']))
-                print("python cmd: ",TASK_EVALUATION.format(s['text'],kb,kh))
                 # Run evaluation process under a subprocess to wait for result
-                subprocess.Popen(TASK_EVALUATION.format(s,kb,kh),shell=True).wait()
-                print("{0}-{1}-s{2} complete!".format(kb,kh,s['id']))
+                subprocess.Popen(cmd, shell=True).wait()
+                print("{0}-{1}-s{2} evaluation complete!".format(kb,kh,s['id']))
 
                 # EXPORT result to output folder
                 print("Copy res from `data/output/SupervisorAgent_sentence_test.csv` to {1}".format(o_path, o_filepath))
@@ -85,15 +92,15 @@ def runevaluate(ns,kbs,khs,o):
                     for row in reader:
                         # Stop after fetching the first row data
                         if currentrow > 0: break
-                        # Insert the sentence text to the beginning of each row
-                        row.insert(0, s)
-                        res = []
+                        row.extend([kb,kh])
+                        res = row
                         # Increasement
                         currentrow += 1
                 f.close()
                 # Write row to results.csv
                 print("Add a new row to {0}",o_file)
                 o.writerow(res)
+                print("{0}-{1}-s{2} FINISHED!".format(kb,kh,s['id']))
 
 # Run final test to verify that the number of rows == the number of sentences (ns*nkb*nkh)
 # Parameters:
@@ -120,7 +127,7 @@ with open(filepath, 'r') as f:
         # Clean up text: covert to lower case and remove punctuation
         text = re.sub(r'[^\w\s]', '', text.lower())
         # Stop after fetching a certain amount of sentences param number_sentences
-        if int(id) > number_sentences: break
+        if int(id) > int(number_sentences): break
         sentences.append({
             'id': id,
             'text': text,

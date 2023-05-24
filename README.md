@@ -64,6 +64,21 @@ To see all available argument, use the command below.
 python main.py --help
 ```
 
+### Run evaluation testing for a dataset of sentences
+Input is required as a `.csv` file. The input file need to be in the same folder. Look at example in [`sentences.csv`](sentences.csv)
+Run an evaluation testing with a certain amount of sentences with the command below:
+```bash
+python type_from_csv.py
+```
+It is possible to define how many sentences you want the agent to type from the input file, by adjusting the parameter `--ns`, as the below example. On default, the agent will type the first 15 sentences from [`sentences.csv`](sentences.csv)
+```bash
+python type_from_csv.py --ns 10
+```
+Output is stored as a [`results.csv`](typefromcsvres/results.csv) - A record of typing performance data, includes all the metrics.
+
+### Statistic Analysis
+Statistic analysis can be done in [`statistic.ipynb`](statistic.ipynb) to calculate the `mean` and `standard deviation` in five metrics: `iki(ms)`, `wpm`, `backspaces` (bs), `immediate backspaces` (immediate-bs) and `delayed backspaces` (delayed-bs). This is a Jupyter notebook allows to use any pandas syntax to analyze the test results. The boxplots graphs for five metrics can be found as `.png` figures in [`/typefromcsvres`](typefromcsvres)
+
 ### Configuration setting
 
 All project configuration files are kept under configs folder.
