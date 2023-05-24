@@ -1,10 +1,11 @@
-# Touchscreen Typing as Optimal Adaptation
+# The Impact of Key Height on Typing Behavior: An Experiment of Typing Performance on Daily Used Smartphone Keyboards
 
-This repository contains the project work in "ELEC-E7861 - Research Project in Human-Computer Interaction" in Aalto University in 2023. The original work can be seen in [TypingAgent](https://github.com/aditya02acharya/TypingAgent.git)
+This repository contains the project work in "ELEC-E7861 - Research Project in Human-Computer Interaction" in Aalto University in 2023. This project is built based on the TypeAgent project, the original work can be seen in [TypingAgent](https://github.com/aditya02acharya/TypingAgent.git)
 
 
 ## Demo of the model
-![demo](SupervisorAgent.gif)
+
+<img src="SupervisorAgent.gif"  width=300>
 
 ## Getting Started
 
