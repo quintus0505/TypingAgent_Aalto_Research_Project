@@ -220,3 +220,4 @@ data/models_saved/
 data/bak/
 data/kbd1k/.idea/
 data/kbd1k/__pycache__/
+!data/output/SupervisorAgent.gif

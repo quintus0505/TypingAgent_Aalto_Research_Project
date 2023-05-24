@@ -4,7 +4,7 @@ This repository contains the project work in "ELEC-E7861 - Research Project in H
 
 
 ## Demo of the model
-![demo](./data/output/demo2.gif)
+![demo](SupervisorAgent.gif)
 
 ## Getting Started
 
